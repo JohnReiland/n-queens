@@ -215,7 +215,15 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var n = Object.keys(obj).length - 1;
+      var max = ((n + 1) * 2);
+      var n = 0;
+      while(n < max) {
+        if (this.hasMinorDiagonalConflictAt(n)) {
+          return true;
+        }
+      };
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
