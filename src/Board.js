@@ -80,7 +80,9 @@
     // test if a specific row on this board contains a conflict
 
     hasArrayConflict: function(array) {
-      return array.reduce((a, c) => a + c) > 1;
+      console.log("this.attributes:", this.attributes);
+      console.log("array:", array);
+      return array.length === 0 ? false : array.reduce((a, c) => a + c) > 1;
     },
 
 
@@ -94,8 +96,10 @@
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       for (var key in this.attributes) {
-        if (this.hasRowConflictAt(key)) {
-          return true;
+        if (key !== "n") {
+          if (this.hasRowConflictAt(key)) {
+            return true;
+          }
         }
       }
       return false;
@@ -175,13 +179,15 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var obj = this.attributes;
       var n = Object.keys(obj).length - 1;
       var max = n;
-      var n =  -n + 1;
+      var n =  -n;
       while(n < max) {
         if (this.hasMajorDiagonalConflictAt(n)) {
           return true;
         }
+        n++;
       };
       return false;
     },
@@ -215,10 +221,10 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var n = Object.keys(obj).length - 1;
-      var max = ((n + 1) * 2);
+      var n = Object.keys(obj).length - 1;   // n = 4          n = 5
+      var max = ((n - 1) * 2);               // max = 3        m
       var n = 0;
-      while(n < max) {
+      while (n <= max) {
         if (this.hasMinorDiagonalConflictAt(n)) {
           return true;
         }
