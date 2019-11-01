@@ -115,8 +115,17 @@ window.findNextQueensSolution = function(n, board) {
     var row = 0;
     var index = 0;
   }  else if (keyAndIndex === -1) {  // last square has a queen
-      debugger;                                                // [][][] Fill this out!!
-                                                      // [][][] Fill this out!!
+    if (n === 1) {
+      return false;
+    }
+    gottenRow = board.get(n-1)
+    gottenRow[n-1] = 0;
+    board.set(n-1, gottenRow);
+    keyAndIndex = nextEmptySquare(n, board);
+    backtrack(keyAndIndex, board, row, index, n);
+    keyAndIndex = nextEmptySquare(n, board);
+    row = keyAndIndex[0];
+    index = keyAndIndex[1];
   } else {
   var row = keyAndIndex[0];
   var index = keyAndIndex[1];
@@ -253,12 +262,10 @@ window.countNRooksSolutions = function(n) {
   var board = new Board({'n': n});  // n = 4
 
   var solutionCount = 0;
-  debugger;
   while (findNextRooksSolution(n, board) === true) {
     solutionCount++;
     console.log("solution found for board of size " + n);
   }
-  debugger;
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -295,8 +302,13 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var board = new Board({'n': n});  // n = 4
 
+  var solutionCount = 0;
+  while (findNextQueensSolution(n, board) === true) {
+    solutionCount++;
+    console.log("solution found for board of size " + n);
+  }
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
