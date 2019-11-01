@@ -16,22 +16,37 @@
 window.findNRooksSolution = function(n) {
 
   var board = new Board({'n': n});  // n = 4
-  var i = 0;
-  var row = 0;
-  var solution = [];
-  while (i < n) {
-    var copiedRow = board.get(row);
-    copiedRow[i] = 1;
-    board.set(row, copiedRow);
-    solution.push(copiedRow);
-    i++;
-    row++;
+  console.log("nextEmptySquare:", nextEmptySquare(n, board));
+  // var i = 0;
+  // var row = 0;
+  // var solution = [];
+  // while (i < n) {
+  //   var copiedRow = board.get(row);
+  //   copiedRow[i] = 1;
+  //   board.set(row, copiedRow);
+  //   solution.push(copiedRow);
+  //   i++;
+  //   row++;
+  // }
+
+  var currTest = nextEmptySquare(n, board);
+  if (currTest === -1) {                              // [][][] Fill this out!!
+                                                      // [][][] Fill this out!!
+  }                                                   // [][][] Fill this out!!
+  var row = currTest[0];
+  var index = currTest[1];
+  var placedRooks = 0;
+
+  while(placedRooks < n) {
+    var gottenRow = board.get(row);
+    var copiedRow = [...gottenRow];
+    gottenRow[index] = 1;
   }
 };
   // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   // return solution;
 
-  nextEmptySquare(n, board) {   // will return an array with [row, column]
+  window.nextEmptySquare = function(n, board) {   // will return an array with [row, column]
     // look at the bottom row (n-1)
     // if the sum is greater than one
       // find the column (index) with a 1 (rook.queen)
@@ -39,19 +54,26 @@ window.findNRooksSolution = function(n) {
       // loot the row above (row--)
     var rowKey = n - 1;
     while (rowKey >= 0) {
-      var testRow = board.get(rowKey); //call arr?
+      var testRow = board.get(rowKey);
       var indexOfElem = testRow.indexOf(1);
       if (indexOfElem === -1) {
         rowKey--;
         continue;
       } else {
-        return [rowKey, indexOfElem];
+        if (indexOfElem === n - 1) {
+          if(rowKey === n - 1) {
+            return -1;
+          } else {
+            rowKey++;
+            indexOfElem = 0;
+            return [rowKey, indexOfElem];
+          }
+        }
+        return [rowKey, indexOfElem + 1];
       };
     };
     return [0, 0];
-  }
-
-
+  };
 
 // arr = [[0, 1, 2, 3],
 //        [4, 5, 6, 7],
