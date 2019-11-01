@@ -180,6 +180,7 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var obj = this.attributes;
+      console.log("values:", Object.values(this.attributes));
       var n = Object.keys(obj).length - 1;
       var max = n - 1;
       var min = -max;
@@ -221,6 +222,7 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      var obj = this.attributes;
       var n = Object.keys(obj).length - 1;
       var max = ((n - 1) * 2);
       var min = 0;
