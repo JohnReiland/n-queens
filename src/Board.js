@@ -181,13 +181,13 @@
     hasAnyMajorDiagonalConflicts: function() {
       var obj = this.attributes;
       var n = Object.keys(obj).length - 1;
-      var max = n;
-      var n =  -n;
-      while(n < max) {
-        if (this.hasMajorDiagonalConflictAt(n)) {
+      var max = n - 1;
+      var min = -max;
+      while(min < max) {
+        if (this.hasMajorDiagonalConflictAt(min)) {
           return true;
         }
-        n++;
+        min++;
       };
       return false;
     },
@@ -221,13 +221,14 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var n = Object.keys(obj).length - 1;   // n = 4          n = 5
-      var max = ((n - 1) * 2);               // max = 3        m
-      var n = 0;
-      while (n <= max) {
-        if (this.hasMinorDiagonalConflictAt(n)) {
+      var n = Object.keys(obj).length - 1;
+      var max = ((n - 1) * 2);
+      var min = 0;
+      while (min <= max) {
+        if (this.hasMinorDiagonalConflictAt(min)) {
           return true;
         }
+        min++;
       };
       return false;
     }
