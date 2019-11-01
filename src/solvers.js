@@ -14,73 +14,121 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-
+  var solution = [];
   var board = new Board({'n': n});  // n = 4
-  console.log("nextEmptySquare:", nextEmptySquare(n, board));
-  // var i = 0;
-  // var row = 0;
-  // var solution = [];
-  // while (i < n) {
-  //   var copiedRow = board.get(row);
-  //   copiedRow[i] = 1;
-  //   board.set(row, copiedRow);
-  //   solution.push(copiedRow);
-  //   i++;
-  //   row++;
-  // }
 
-  var currTest = nextEmptySquare(n, board);
-  if (currTest === -1) {                              // [][][] Fill this out!!
+  if (findNextRooksSolution(n, board) === true) {
+    for (var i = 0; i < n; i++) {
+      solution.push(board.get(i));
+    }
+  }
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return solution;
+};
+
+window.findNextRooksSolution = function(n, board) {
+  var keyAndIndex = nextEmptySquare(n, board);
+  if (keyAndIndex === 0) {           // board is empty
+    var row = 0;
+    var index = 0;
+  }  else if (keyAndIndex === -1) {  // last square has a queen
                                                       // [][][] Fill this out!!
-  }                                                   // [][][] Fill this out!!
-  var row = currTest[0];
-  var index = currTest[1];
-  var placedRooks = 0;
+                                                      // [][][] Fill this out!!
+  } else {
+  var row = keyAndIndex[0];
+  var index = keyAndIndex[1];
+  }
+  var placedQueens = 0;
 
-  while(placedRooks < n) {
+  while (placedQueens < n) {
     var gottenRow = board.get(row);
     var copiedRow = [...gottenRow];
-    gottenRow[index] = 1;
-  }
-};
-  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  // return solution;
+    gottenRow[index] = 1;                              // add a new queen
+    board.set(row, gottenRow);
 
-  window.nextEmptySquare = function(n, board) {   // will return an array with [row, column]
-    // look at the bottom row (n-1)
-    // if the sum is greater than one
-      // find the column (index) with a 1 (rook.queen)
-    // else
-      // loot the row above (row--)
-    var rowKey = n - 1;
-    while (rowKey >= 0) {
-      var testRow = board.get(rowKey);
-      var indexOfElem = testRow.indexOf(1);
-      if (indexOfElem === -1) {
-        rowKey--;
+    if (board.hasAnyRowConflicts() || board.hasAnyColConflicts()) {
+      board.set(row, copiedRow);
+
+      if (index <= n - 2) {
+        index++;
+        continue;
+      } else if (row <= n - 2) {
+        row++;
+        index = 0;
         continue;
       } else {
-        if (indexOfElem === n - 1) {
-          if(rowKey === n - 1) {
-            return -1;
-          } else {
-            rowKey++;
-            indexOfElem = 0;
-            return [rowKey, indexOfElem];
-          }
+        backtrack(keyAndIndex);
+        continue;
+      }
+    }
+    placedQueens++;
+    if (placedQueens === n) {
+      break;
+    } else if (index <= n - 2) {
+      index++;
+      continue;
+    } else if (row <= n - 2) {
+      row++;
+      index = 0;
+      continue;
+    } else {
+      board.set(row, copiedRow);
+      placedQueens--;
+      if (placedQueens === 0) {
+        return false;
+      }
+      var keyAndIndex = nextEmptySquare(n, board);
+      backtrack(keyAndIndex);
+    }
+  }
+  return true;
+};
+
+
+window.nextEmptySquare = function(n, board) {
+  var rowKey = n - 1;
+  while (rowKey >= 0) {
+    var testRow = board.get(rowKey);
+    var indexOfElem = testRow.indexOf(1);
+    if (indexOfElem === -1) {
+      rowKey--;
+      continue;
+    } else {
+      var rowQueen = rowKey
+      var indexQueen = indexOfElem
+      if (indexOfElem === n - 1) {
+        if (rowKey === n - 1) {
+          return -1;
+        } else {
+          rowKey++;
+          indexOfElem = 0;
+          return [rowKey, indexOfElem, rowQueen, indexQueen];
         }
-        return [rowKey, indexOfElem + 1];
-      };
+      }
+      indexOfElem++;
+      return [rowKey, indexOfElem, rowQueen, indexQueen];
     };
-    return [0, 0];
   };
+  return 0;
+};
 
-// arr = [[0, 1, 2, 3],
-//        [4, 5, 6, 7],
-//        [8, 9, 10, 11],
-//        [12, 13, 14, 15]];
+window.backtrack = function (keyAndIndex) {
+  gottenRow = board.get(keyAndIndex[2]);        // Remove the most-recently placed queen and...
+  gottenRow[keyAndIndex][3] = 0;
+  board.set(keyAndIndex[2]);
 
-// arr.join("").split(",").join("").lastIndexOf(1)
+  gottenRow = board.get(keyAndIndex[0]);        // ...place it into the next available square
+  gottenRow[keyAndIndex][1] = 1;
+  board.set(keyAndIndex[0]);
+
+  keyAndIndex = nextEmptySquare(n, board);      // re-initialize row and index
+  if (keyAndIndex === -1) {                           // [][][] Fill this out!!
+    // [][][] Fill this out!!
+  }
+  row = keyAndIndex[0];
+  index = keyAndIndex[1];
+  continue;
+};
 
 
 
@@ -107,3 +155,5 @@ window.countNQueensSolutions = function(n) {
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
+
+

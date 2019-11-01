@@ -80,8 +80,8 @@
     // test if a specific row on this board contains a conflict
 
     hasArrayConflict: function(array) {
-      console.log("this.attributes:", this.attributes);
-      console.log("array:", array);
+      //console.log("this.attributes:", this.attributes);
+      //console.log("array:", array);
       return array.length === 0 ? false : array.reduce((a, c) => a + c) > 1;
     },
 
@@ -180,7 +180,7 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var obj = this.attributes;
-      console.log("values:", Object.values(this.attributes));
+      //console.log("values:", Object.values(this.attributes));
       var n = Object.keys(obj).length - 1;
       var max = n - 1;
       var min = -max;
